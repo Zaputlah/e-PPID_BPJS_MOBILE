@@ -1,20 +1,13 @@
-# ppid
+# PPID
 
-Berikut screenshot tampilannya:
+## Login & Aktivasi
+<img src="images/login.jpg" width="250"> <img src="images/aktivasi.jpg" width="250">
 
-Login
-![Screenshot](images/login.jpg)
+## Aktivasi User
+<img src="images/aktivasipendaftaran.jpg" width="250">
 
-Aktivasi
-![Screenshot](images/aktivasi.jpg)
+## Daftar
+<img src="images/daftar.jpg" width="250"> <img src="images/daftar2.jpg" width="250">
 
-Aktivasi user
-![Screenshot](images/aktivasipendaftaran.jpg)
-
-Daftar
-![Screenshot](images/daftar.jpg)
-![Screenshot](images/daftar2.jpg)
-
-Lupa password
-![Screenshot](images/lupapassword.jpg)
-
+## Lupa Password
+<img src="images/lupapassword.jpg" width="250">
