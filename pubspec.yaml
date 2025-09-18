@@ -47,7 +47,9 @@ dependencies:
   crypto: ^3.0.3
   url_launcher: ^6.2.5
   encrypt: ^5.0.1
-
+  file_picker: ^10.3.2
+  html_editor_enhanced: ^2.7.1
+  get: ^4.6.6
 
 
   # The following adds the Cupertino Icons font to your application.

@@ -1,27 +1,30 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:mailer/mailer.dart';
-import '../config/api_config.dart';
 
 class RegisterService {
   static Future<Map<String, dynamic>> registerUser(Map<String, String> data) async {
-    final uri = ApiConfig.getUri('LoginCtrl/RegistrasiUser');
+    final uri = Uri.parse('https://dvlp.bpjs-kesehatan.go.id/PpidAPI/api/v1.0/Auth/Registrasi');
 
-    print(uri);
+    print('Mengirim ke: $uri');
+    print('Data: $data');
+
     final response = await http.post(
       uri,
       headers: {'Content-Type': 'application/json'},
       body: jsonEncode(data),
     );
 
-    print(response.body);
-    print(response.statusCode);
+    print('Response status: ${response.statusCode}');
+    print('Response body: ${response.body}');
 
     if (response.statusCode == 200) {
       final json = jsonDecode(response.body);
+      final code = json['metadata']?['code'];
+      final message = json['metadata']?['message'] ?? 'Registrasi gagal';
+
       return {
-        'success': json['status'] == 'success',
-        'message': json['metadata']?['message'] ?? 'Registrasi gagal',
+        'success': code == 200,
+        'message': message,
       };
     } else {
       return {'success': false, 'message': 'Server error'};

@@ -68,6 +68,8 @@ class _ActivationPageState extends State<ActivationPage> {
                     _buildTextField(
                         _controller.usernameController, "Username", false),
                     _buildTextField(
+                        _controller.emailController, "Email", false),
+                    _buildTextField(
                         _controller.codeController, "Kode Aktivasi", true),
                     const SizedBox(height: 20),
                     Row(
@@ -125,8 +127,8 @@ class _ActivationPageState extends State<ActivationPage> {
         keyboardType: isNumeric ? TextInputType.number : TextInputType.text,
         inputFormatters: isNumeric
             ? <TextInputFormatter>[
-                FilteringTextInputFormatter.digitsOnly,
-              ]
+          FilteringTextInputFormatter.digitsOnly,
+        ]
             : null,
         decoration: InputDecoration(
           labelText: label,

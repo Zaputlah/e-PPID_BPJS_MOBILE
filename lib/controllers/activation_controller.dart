@@ -3,6 +3,7 @@ import '../services/activation_service.dart';
 
 class ActivationController {
   final TextEditingController usernameController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
   final TextEditingController codeController = TextEditingController();
 
   final ActivationService _service = ActivationService();
@@ -10,11 +11,26 @@ class ActivationController {
 
   Future<void> submitActivation(BuildContext context) async {
     final username = usernameController.text.trim();
+    final email = emailController.text.trim();
     final code = codeController.text.trim();
 
     if (username.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("Username wajib diisi")),
+      );
+      return;
+    }
+
+    if (email.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Email wajib diisi")),
+      );
+      return;
+    }
+
+    if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(email)) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Format email tidak valid")),
       );
       return;
     }
@@ -26,19 +42,12 @@ class ActivationController {
       return;
     }
 
-    final codeIsNumeric = RegExp(r'^\d+$').hasMatch(code);
-    if (!codeIsNumeric) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Kode aktivasi hanya boleh berisi angka")),
-      );
-      return;
-    }
-
     isLoading = true;
 
     try {
-      final result = await _service.activateUser(username, code);
-      final message = result["message"] ?? "Aktivasi berhasil";
+      final result = await _service.activateUser(username, email, code);
+      final metadata = result["metadata"];
+      final message = metadata?["message"] ?? "Aktivasi berhasil";
 
       await showDialog(
         context: context,
@@ -64,6 +73,7 @@ class ActivationController {
 
   void dispose() {
     usernameController.dispose();
+    emailController.dispose();
     codeController.dispose();
   }
 }
