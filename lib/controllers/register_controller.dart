@@ -58,15 +58,15 @@ class RegisterController {
   void checkFormValidity() {
     isFormValid =
         nama.text.trim().isNotEmpty &&
-            ktp.text.trim().length == 16 &&
-            bpjs.text.trim().isNotEmpty &&
-            alamat.text.trim().isNotEmpty &&
-            selectedPekerjaanId != null &&
-            nohp.text.trim().isNotEmpty &&
-            email.text.trim().isNotEmpty &&
-            username.text.trim().isNotEmpty &&
-            password.text.trim().isNotEmpty &&
-            password.text == confirmPassword.text;
+        ktp.text.trim().length == 16 &&
+        bpjs.text.trim().isNotEmpty &&
+        alamat.text.trim().isNotEmpty &&
+        selectedPekerjaanId != null &&
+        nohp.text.trim().isNotEmpty &&
+        email.text.trim().isNotEmpty &&
+        username.text.trim().isNotEmpty &&
+        password.text.trim().isNotEmpty &&
+        password.text == confirmPassword.text;
 
     _refreshUI();
   }
@@ -93,23 +93,29 @@ class RegisterController {
       'nohp': nohp.text.trim(),
     };
 
-
     final response = await RegisterService.registerUser(data);
 
     isLoading = false;
     _refreshUI();
 
     if (response['success']) {
-      _showDialog("Registrasi berhasil. Silakan cek email untuk aktivasi.",
-          success: true, onClose: () {
-            Navigator.pushNamed(_context, '/activation');
-          });
+      _showDialog(
+        "Registrasi berhasil. Silakan cek email untuk aktivasi.",
+        success: true,
+        onClose: () {
+          Navigator.pushNamed(_context, '/activation_page');
+        },
+      );
     } else {
       _showDialog(response['message'] ?? 'Gagal registrasi', success: false);
     }
   }
 
-  void _showDialog(String message, {bool success = false, VoidCallback? onClose}) {
+  void _showDialog(
+    String message, {
+    bool success = false,
+    VoidCallback? onClose,
+  }) {
     showDialog(
       context: _context,
       builder: (_) => Dialog(
@@ -119,22 +125,35 @@ class RegisterController {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(success ? Icons.check_circle_outline : Icons.error_outline,
-                  color: success ? Colors.green : Colors.red, size: 48),
+              Icon(
+                success ? Icons.check_circle_outline : Icons.error_outline,
+                color: success ? Colors.green : Colors.red,
+                size: 48,
+              ),
               const SizedBox(height: 12),
-              Text(success ? 'Berhasil' : 'Gagal',
-                  style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: success ? Colors.green : Colors.red)),
+              Text(
+                success ? 'Berhasil' : 'Gagal',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: success ? Colors.green : Colors.red,
+                ),
+              ),
               const SizedBox(height: 10),
-              Text(message, textAlign: TextAlign.center, style: const TextStyle(fontSize: 15)),
+              Text(
+                message,
+                textAlign: TextAlign.center,
+                style: const TextStyle(fontSize: 15),
+              ),
               const SizedBox(height: 20),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                    backgroundColor: success ? Colors.green : Colors.red,
-                    foregroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8))),
+                  backgroundColor: success ? Colors.green : Colors.red,
+                  foregroundColor: Colors.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
                 onPressed: () {
                   Navigator.of(_context).pop();
                   if (onClose != null) onClose();

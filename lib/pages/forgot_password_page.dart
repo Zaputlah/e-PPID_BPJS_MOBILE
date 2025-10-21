@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../controllers/forgot_password_controller.dart';
 
 class ForgotPasswordPage extends StatefulWidget {
   const ForgotPasswordPage({super.key});
@@ -8,9 +9,14 @@ class ForgotPasswordPage extends StatefulWidget {
 }
 
 class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
-  final TextEditingController _usernameController = TextEditingController();
-  final TextEditingController _emailController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+  final ForgotPasswordController _controller = ForgotPasswordController();
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   String? _validateEmail(String? value) {
     if (value == null || value.trim().isEmpty) {
@@ -21,17 +27,6 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
       return 'Format email tidak valid';
     }
     return null;
-  }
-
-  void _submitForgotPassword() {
-    if (_formKey.currentState!.validate()) {
-      final username = _usernameController.text.trim();
-      final email = _emailController.text.trim();
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Reset password untuk $username dengan email $email")),
-      );
-    }
   }
 
   @override
@@ -46,14 +41,17 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
           ),
           child: Form(
             key: _formKey,
-            autovalidateMode: AutovalidateMode.onUserInteraction, // auto cek saat user interaksi
+            autovalidateMode: AutovalidateMode.onUserInteraction,
             child: Column(
               children: [
                 Container(
                   margin: const EdgeInsets.symmetric(horizontal: 16),
                   width: double.infinity,
                   color: Colors.blue,
-                  padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 16,
+                    horizontal: 12,
+                  ),
                   child: const Text(
                     "Lupa Password",
                     style: TextStyle(
@@ -65,7 +63,10 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                   ),
                 ),
                 Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 16),
+                  margin: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 20,
+                  ),
                   padding: const EdgeInsets.all(20),
                   decoration: const BoxDecoration(
                     color: Colors.white,
@@ -74,13 +75,13 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                         color: Colors.black12,
                         blurRadius: 10,
                         offset: Offset(0, 4),
-                      )
+                      ),
                     ],
                   ),
                   child: Column(
                     children: [
                       TextFormField(
-                        controller: _usernameController,
+                        controller: _controller.usernameController,
                         decoration: const InputDecoration(
                           labelText: "Username",
                           border: OutlineInputBorder(),
@@ -94,7 +95,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                       ),
                       const SizedBox(height: 15),
                       TextFormField(
-                        controller: _emailController,
+                        controller: _controller.emailController,
                         decoration: const InputDecoration(
                           labelText: "Email",
                           border: OutlineInputBorder(),
@@ -102,42 +103,64 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                         validator: _validateEmail,
                       ),
                       const SizedBox(height: 20),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: ElevatedButton.icon(
-                              onPressed: _submitForgotPassword,
-                              icon: const Icon(Icons.lock_reset),
-                              label: const Text("Kirim"),
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.green,
-                                foregroundColor: Colors.white,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10),
+                      ValueListenableBuilder<bool>(
+                        valueListenable: _controller.isLoading,
+                        builder: (context, loading, _) {
+                          return Row(
+                            children: [
+                              Expanded(
+                                child: ElevatedButton.icon(
+                                  onPressed: loading
+                                      ? null
+                                      : () {
+                                          if (_formKey.currentState!
+                                              .validate()) {
+                                            _controller.submitForgotPassword(
+                                              context,
+                                            );
+                                          }
+                                        },
+                                  icon: const Icon(Icons.lock_reset),
+                                  label: Text(loading ? "Loading..." : "Kirim"),
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.green,
+                                    foregroundColor: Colors.white,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    padding: const EdgeInsets.symmetric(
+                                      vertical: 14,
+                                    ),
+                                  ),
                                 ),
-                                padding: const EdgeInsets.symmetric(vertical: 14),
                               ),
-                            ),
-                          ),
-                          const SizedBox(width: 10),
-                          Expanded(
-                            child: ElevatedButton.icon(
-                              onPressed: () => Navigator.pop(context),
-                              icon: const Icon(Icons.arrow_back),
-                              label: const Text("Kembali"),
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.white,
-                                foregroundColor: Colors.black,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10),
+                              const SizedBox(width: 10),
+                              Expanded(
+                                child: ElevatedButton.icon(
+                                  onPressed: loading
+                                      ? null
+                                      : () => Navigator.pop(context),
+                                  icon: const Icon(Icons.arrow_back),
+                                  label: const Text("Kembali"),
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.white,
+                                    foregroundColor: Colors.black,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    padding: const EdgeInsets.symmetric(
+                                      vertical: 14,
+                                    ),
+                                    side: const BorderSide(
+                                      color: Colors.black12,
+                                    ),
+                                  ),
                                 ),
-                                padding: const EdgeInsets.symmetric(vertical: 14),
-                                side: const BorderSide(color: Colors.black12),
                               ),
-                            ),
-                          ),
-                        ],
-                      )
+                            ],
+                          );
+                        },
+                      ),
                     ],
                   ),
                 ),

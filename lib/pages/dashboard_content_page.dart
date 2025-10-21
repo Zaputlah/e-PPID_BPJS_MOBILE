@@ -39,16 +39,15 @@ class DashboardContent extends StatelessWidget {
             ),
             child: Row(
               children: [
-                const Icon(Icons.info_outline,
-                    color: Colors.white, size: 40),
+                const Icon(Icons.info_outline, color: Colors.white, size: 40),
                 const SizedBox(width: 12),
                 Expanded(
                   child: Text(
                     "Selamat Datang di Layanan ePPID BPJS Kesehatan",
                     style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                        ),
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
               ],
@@ -56,6 +55,7 @@ class DashboardContent extends StatelessWidget {
           ),
 
           const SizedBox(height: 16),
+          // --- Deskripsi Layanan ---
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
@@ -81,18 +81,89 @@ class DashboardContent extends StatelessWidget {
 
           const SizedBox(height: 20),
 
+          Row(
+            children: [
+              Expanded(
+                child: _buildStatCard(
+                  title: "Kotak Masuk",
+                  count: 0,
+                  color: Colors.lightBlue,
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: _buildStatCard(
+                  title: "Berkas Tidak Lengkap",
+                  count: 0,
+                  color: Colors.deepPurple,
+                ),
+              ),
+            ],
+          ),
+
+          const SizedBox(height: 20),
+
+          // --- Profil Anda ---
           Text(
             "Profil Anda",
             style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                  fontWeight: FontWeight.bold,
-                  color: Colors.grey[800],
-                ),
+              fontWeight: FontWeight.bold,
+              color: Colors.grey[800],
+            ),
           ),
           const SizedBox(height: 8),
           ProfileCard(
             nama: userData["nama"],
             userId: userData["userId"],
             onLogout: onLogout,
+          ),
+        ],
+      ),
+    );
+  }
+
+  // --- Widget Kartu Statistik ---
+  Widget _buildStatCard({
+    required String title,
+    required int count,
+    required Color color,
+  }) {
+    return Container(
+      height: 100,
+      decoration: BoxDecoration(
+        color: color,
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Stack(
+        children: [
+          Positioned(
+            top: 6,
+            left: 6,
+            child: Icon(
+              Icons.warning_amber_rounded,
+              color: Colors.yellow.shade200,
+              size: 16,
+            ),
+          ),
+          Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  count.toString(),
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 32,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  title,
+                  style: const TextStyle(color: Colors.white, fontSize: 14),
+                ),
+              ],
+            ),
           ),
         ],
       ),

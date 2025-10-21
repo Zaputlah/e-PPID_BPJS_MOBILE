@@ -42,7 +42,9 @@ class AppDrawer extends StatelessWidget {
               accountName: Text(
                 userData?["nama"] ?? "User",
                 style: const TextStyle(
-                    fontWeight: FontWeight.bold, fontSize: 16),
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                ),
               ),
               accountEmail: Text(userData?["userId"] ?? "-"),
               currentAccountPicture: const CircleAvatar(
@@ -57,6 +59,7 @@ class AppDrawer extends StatelessWidget {
               child: ListView(
                 padding: const EdgeInsets.symmetric(horizontal: 6),
                 children: [
+                  // 🔹 Dashboard
                   _buildDrawerItem(
                     context: context,
                     icon: Icons.dashboard,
@@ -71,13 +74,66 @@ class AppDrawer extends StatelessWidget {
                       );
                     },
                   ),
+                  // 🔹 Entrian Section
+                  _buildExpandableMenu(
+                    context,
+                    title: "Pengajuan",
+                    icon: Icons.file_copy_sharp,
+                    isSelected: selectedMenu.contains("Pengajuan"),
+                    children: [
+                      _buildSubMenu(
+                        context,
+                        title: "Permohonan",
+                        isSelected: selectedMenu == "EntrianPermohonan",
+                        onTap: () {
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) =>
+                                  EntrianPermohonanPage(token: token),
+                            ),
+                          );
+                        },
+                      ),
+                      _buildSubMenu(
+                        context,
+                        title: "Keberatan",
+                        isSelected: selectedMenu == "EntrianKeberatan",
+                        onTap: () {
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) =>
+                                  EntrianKeberatanPage(token: token), // ✅ FIX
+                            ),
+                          );
+                        },
+                      ),
+                    ],
+                  ),
+
+                  // Hasil Penenlitian
+                  _buildDrawerItem(
+                    context: context,
+                    icon: Icons.search_sharp,
+                    text: "Hasil Penelitian",
+                    isSelected: selectedMenu == "HasilPenelitian",
+                    onTap: () {
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => EntrianPermohonanPage(token: token),
+                        ),
+                      );
+                    },
+                  ),
 
                   // 🔹 Entrian Section
                   _buildExpandableMenu(
                     context,
-                    title: "Entrian",
-                    icon: Icons.edit_document,
-                    isSelected: selectedMenu.contains("Entrian"),
+                    title: "Kotak Masuk",
+                    icon: Icons.inbox,
+                    isSelected: selectedMenu.contains("kotakmasuk"),
                     children: [
                       _buildSubMenu(
                         context,
@@ -157,8 +213,10 @@ class AppDrawer extends StatelessWidget {
               leading: const Icon(Icons.logout, color: Colors.red),
               title: const Text(
                 "Logout",
-                style:
-                    TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                  color: Colors.red,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
               onTap: () => _confirmLogout(context),
             ),
@@ -213,11 +271,12 @@ class AppDrawer extends StatelessWidget {
         color: isSelected ? Colors.blue.withOpacity(0.08) : Colors.transparent,
       ),
       child: Theme(
-        data: Theme.of(context).copyWith(
-          dividerColor: Colors.transparent,
-        ),
+        data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
         child: ExpansionTile(
-          leading: Icon(icon, color: isSelected ? Colors.blue : Colors.grey[700]),
+          leading: Icon(
+            icon,
+            color: isSelected ? Colors.blue : Colors.grey[700],
+          ),
           title: Text(
             title,
             style: TextStyle(
@@ -233,10 +292,12 @@ class AppDrawer extends StatelessWidget {
   }
 
   // 🔹 Sub Menu Item
-  Widget _buildSubMenu(BuildContext context,
-      {required String title,
-      required bool isSelected,
-      required VoidCallback onTap}) {
+  Widget _buildSubMenu(
+    BuildContext context, {
+    required String title,
+    required bool isSelected,
+    required VoidCallback onTap,
+  }) {
     return ListTile(
       dense: true,
       contentPadding: const EdgeInsets.only(left: 60, right: 16),
@@ -269,10 +330,7 @@ class AppDrawer extends StatelessWidget {
       },
       transitionBuilder: (context, animation, secondaryAnimation, child) {
         return ScaleTransition(
-          scale: CurvedAnimation(
-            parent: animation,
-            curve: Curves.easeOutBack,
-          ),
+          scale: CurvedAnimation(parent: animation, curve: Curves.easeOutBack),
           child: FadeTransition(opacity: animation, child: child),
         );
       },
@@ -282,9 +340,8 @@ class AppDrawer extends StatelessWidget {
       showDialog(
         context: context,
         barrierDismissible: false,
-        builder: (_) => const Center(
-          child: CircularProgressIndicator(color: Colors.blue),
-        ),
+        builder: (_) =>
+            const Center(child: CircularProgressIndicator(color: Colors.blue)),
       );
 
       await Future.delayed(const Duration(seconds: 1));

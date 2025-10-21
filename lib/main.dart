@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ppid/routes/app_router.dart';
-// import 'package:ppid/pages/LoginWebView.dart';
+import 'package:ppid/pages/splash_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -18,8 +18,12 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
         useMaterial3: true,
       ),
+      // gunakan initialRoute dan definisikan '/' di routes
       initialRoute: '/',
-      routes: appRoutes,
+      routes: {
+        '/': (context) => const SplashScreen(),
+        ...appRoutes, // gabungkan dengan routes lain dari app_router.dart
+      },
     );
   }
 }

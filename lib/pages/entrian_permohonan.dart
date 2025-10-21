@@ -58,9 +58,9 @@ class _EntrianPermohonanPageState extends State<EntrianPermohonanPage> {
       final file = File(result.files.single.path!);
       final sizeInMb = file.lengthSync() / (1024 * 1024);
       if (sizeInMb > 2) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("File harus < 2Mb ⚠️")),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(const SnackBar(content: Text("File harus < 2Mb ⚠️")));
         return;
       }
       onFilePicked(file);
@@ -109,7 +109,9 @@ class _EntrianPermohonanPageState extends State<EntrianPermohonanPage> {
           child: Form(
             key: _formKey,
             child: Card(
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
               elevation: 3,
               child: Padding(
                 padding: const EdgeInsets.all(16),
@@ -135,7 +137,8 @@ class _EntrianPermohonanPageState extends State<EntrianPermohonanPage> {
                         labelText: "KTP/SIM/KITAS Pemohon *",
                         border: OutlineInputBorder(),
                       ),
-                      validator: (val) => val == null || val.isEmpty ? "Wajib diisi" : null,
+                      validator: (val) =>
+                          val == null || val.isEmpty ? "Wajib diisi" : null,
                     ),
                     const SizedBox(height: 12),
 
@@ -148,7 +151,8 @@ class _EntrianPermohonanPageState extends State<EntrianPermohonanPage> {
                         labelText: "Pemohon *",
                         border: OutlineInputBorder(),
                       ),
-                      validator: (val) => val == null || val.isEmpty ? "Wajib diisi" : null,
+                      validator: (val) =>
+                          val == null || val.isEmpty ? "Wajib diisi" : null,
                     ),
                     const SizedBox(height: 12),
 
@@ -198,7 +202,8 @@ class _EntrianPermohonanPageState extends State<EntrianPermohonanPage> {
                         labelText: "No. HP *",
                         border: OutlineInputBorder(),
                       ),
-                      validator: (val) => val == null || val.isEmpty ? "Wajib diisi" : null,
+                      validator: (val) =>
+                          val == null || val.isEmpty ? "Wajib diisi" : null,
                     ),
                     const SizedBox(height: 12),
 
@@ -209,9 +214,13 @@ class _EntrianPermohonanPageState extends State<EntrianPermohonanPage> {
                         labelText: "Keperluan Informasi *",
                         border: OutlineInputBorder(),
                       ),
-                      items: ["Penelitian", "Pelaporan", "Pengembangan", "Lainnya"]
-                          .map((e) => DropdownMenuItem(value: e, child: Text(e)))
-                          .toList(),
+                      items:
+                          ["Penelitian", "Pelaporan", "Pengembangan", "Lainnya"]
+                              .map(
+                                (e) =>
+                                    DropdownMenuItem(value: e, child: Text(e)),
+                              )
+                              .toList(),
                       onChanged: (val) => setState(() {
                         selectedKeperluan = val;
                         // Reset fields saat keperluan diganti
@@ -223,7 +232,8 @@ class _EntrianPermohonanPageState extends State<EntrianPermohonanPage> {
                         alasanHtmlController.setText('');
                         rincianHtmlController.setText('');
                       }),
-                      validator: (val) => val == null ? "Pilih salah satu" : null,
+                      validator: (val) =>
+                          val == null ? "Pilih salah satu" : null,
                     ),
                     const SizedBox(height: 20),
 
@@ -237,27 +247,55 @@ class _EntrianPermohonanPageState extends State<EntrianPermohonanPage> {
                           border: OutlineInputBorder(),
                         ),
                         items: ["Data Publik", "Data Internal", "Data Rahasia"]
-                            .map((e) => DropdownMenuItem(value: e, child: Text(e)))
+                            .map(
+                              (e) => DropdownMenuItem(value: e, child: Text(e)),
+                            )
                             .toList(),
-                        onChanged: (val) => setState(() => selectedJenisPermohonan = val),
-                        validator: (val) => val == null ? "Pilih salah satu" : null,
+                        onChanged: (val) =>
+                            setState(() => selectedJenisPermohonan = val),
+                        validator: (val) =>
+                            val == null ? "Pilih salah satu" : null,
                       ),
                       const SizedBox(height: 12),
 
                       // Alasan (HTML Editor)
-                      _buildHtmlEditor("Alasan Penggunaan Informasi *", alasanHtmlController, editorHeight),
+                      _buildHtmlEditor(
+                        "Alasan Penggunaan Informasi *",
+                        alasanHtmlController,
+                        editorHeight,
+                      ),
 
                       // Rincian (HTML Editor)
-                      _buildHtmlEditor("Rincian Informasi *", rincianHtmlController, editorHeight),
+                      _buildHtmlEditor(
+                        "Rincian Informasi *",
+                        rincianHtmlController,
+                        editorHeight,
+                      ),
 
                       // Upload Fields
-                      _buildUploadField("Upload File Identitas (.pdf < 2Mb)", fileIdentitas, (f) => setState(() => fileIdentitas = f)),
+                      _buildUploadField(
+                        "Upload File Identitas (.pdf < 2Mb)",
+                        fileIdentitas,
+                        (f) => setState(() => fileIdentitas = f),
+                      ),
                       const SizedBox(height: 12),
-                      _buildUploadField("Upload File Permintaan Data (.pdf < 2Mb)", filePermintaan, (f) => setState(() => filePermintaan = f)),
+                      _buildUploadField(
+                        "Upload File Permintaan Data (.pdf < 2Mb)",
+                        filePermintaan,
+                        (f) => setState(() => filePermintaan = f),
+                      ),
                       const SizedBox(height: 12),
-                      _buildUploadField("Upload Surat Pengantar (.pdf < 2Mb)", fileSuratPengantar, (f) => setState(() => fileSuratPengantar = f)),
+                      _buildUploadField(
+                        "Upload Surat Pengantar (.pdf < 2Mb)",
+                        fileSuratPengantar,
+                        (f) => setState(() => fileSuratPengantar = f),
+                      ),
                       const SizedBox(height: 12),
-                      _buildUploadField("Upload Formulir Informasi Publik (.pdf < 2Mb)", fileFormulir, (f) => setState(() => fileFormulir = f)),
+                      _buildUploadField(
+                        "Upload Formulir Informasi Publik (.pdf < 2Mb)",
+                        fileFormulir,
+                        (f) => setState(() => fileFormulir = f),
+                      ),
                       const SizedBox(height: 20),
                     ],
 
@@ -269,31 +307,44 @@ class _EntrianPermohonanPageState extends State<EntrianPermohonanPage> {
                         label: const Text("Ajukan Permohonan"),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.blue,
-                          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 24,
+                            vertical: 12,
+                          ),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
                         ),
                         onPressed: () async {
-                          String alasanHtml = await alasanHtmlController.getText();
-                          String rincianHtml = await rincianHtmlController.getText();
+                          String alasanHtml = await alasanHtmlController
+                              .getText();
+                          String rincianHtml = await rincianHtmlController
+                              .getText();
                           String alasanPlain = _stripHtmlTags(alasanHtml);
                           String rincianPlain = _stripHtmlTags(rincianHtml);
 
                           if (_formKey.currentState!.validate()) {
                             if (alasanPlain.trim().length < 10) {
                               ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(content: Text("Alasan minimal 10 karakter")),
+                                const SnackBar(
+                                  content: Text("Alasan minimal 10 karakter"),
+                                ),
                               );
                               return;
                             }
                             if (rincianPlain.trim().length < 10) {
                               ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(content: Text("Rincian minimal 10 karakter")),
+                                const SnackBar(
+                                  content: Text("Rincian minimal 10 karakter"),
+                                ),
                               );
                               return;
                             }
 
                             ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(content: Text("Permohonan berhasil disubmit ✅")),
+                              const SnackBar(
+                                content: Text("Permohonan berhasil disubmit ✅"),
+                              ),
                             );
                           }
                         },
@@ -309,7 +360,11 @@ class _EntrianPermohonanPageState extends State<EntrianPermohonanPage> {
     );
   }
 
-  Widget _buildUploadField(String label, File? file, Function(File) onFilePicked) {
+  Widget _buildUploadField(
+    String label,
+    File? file,
+    Function(File) onFilePicked,
+  ) {
     return InkWell(
       onTap: () => _pickFile(onFilePicked),
       child: InputDecorator(
@@ -318,16 +373,25 @@ class _EntrianPermohonanPageState extends State<EntrianPermohonanPage> {
           border: const OutlineInputBorder(),
           suffixIcon: const Icon(Icons.attach_file),
         ),
-        child: Text(file != null ? file.path.split("/").last : "Belum ada file"),
+        child: Text(
+          file != null ? file.path.split("/").last : "Belum ada file",
+        ),
       ),
     );
   }
 
-  Widget _buildHtmlEditor(String label, HtmlEditorController controller, double height) {
+  Widget _buildHtmlEditor(
+    String label,
+    HtmlEditorController controller,
+    double height,
+  ) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
+        Text(
+          label,
+          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+        ),
         const SizedBox(height: 4),
         Container(
           height: height,
@@ -341,19 +405,17 @@ class _EntrianPermohonanPageState extends State<EntrianPermohonanPage> {
               hint: "Tulis minimal 10 karakter",
               shouldEnsureVisible: true,
               initialText: """
-                                  <html>
-                                    <head>
-                                      <style>
-                                        body { 
-                                          background-color: black !important; 
-                                          color: white !important; 
-                                          font-size: 14px !important; 
-                                        }
-                                      </style>
-                                    </head>
-                                    <body></body>
-                                  </html>
-                                """,
+                      <body style="
+                        background-color: #1E1E2F; 
+                        color: #000000; 
+                        font-size: 14px; 
+                        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                        line-height: 1.6;
+                        padding: 10px;
+                      ">
+                      <p style="color:#AAAAAA;"></p> 
+                      </body>
+                    """,
             ),
             htmlToolbarOptions: HtmlToolbarOptions(
               defaultToolbarButtons: [

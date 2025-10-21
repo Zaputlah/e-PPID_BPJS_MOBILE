@@ -15,23 +15,23 @@ class ActivationController {
     final code = codeController.text.trim();
 
     if (username.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Username wajib diisi")),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text("Username wajib diisi")));
       return;
     }
 
     if (email.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Email wajib diisi")),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text("Email wajib diisi")));
       return;
     }
 
     if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(email)) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Format email tidak valid")),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text("Format email tidak valid")));
       return;
     }
 
@@ -56,16 +56,22 @@ class ActivationController {
           content: Text(message),
           actions: [
             TextButton(
-              onPressed: () => Navigator.pop(ctx),
+              onPressed: () {
+                Navigator.pop(ctx); // Tutup dialog
+                Navigator.pushReplacementNamed(
+                  context,
+                  '/',
+                ); // Arahkan ke login page
+              },
               child: const Text("OK"),
             ),
           ],
         ),
       );
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Terjadi kesalahan: $e")),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text("Terjadi kesalahan: $e")));
     } finally {
       isLoading = false;
     }

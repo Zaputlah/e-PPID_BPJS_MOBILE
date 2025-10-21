@@ -69,7 +69,8 @@ class _EntrianKeberatanPageState extends State<EntrianKeberatanPage> {
             key: _formKey,
             child: Card(
               shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12)),
+                borderRadius: BorderRadius.circular(12),
+              ),
               elevation: 3,
               child: Padding(
                 padding: const EdgeInsets.all(16),
@@ -141,8 +142,9 @@ class _EntrianKeberatanPageState extends State<EntrianKeberatanPage> {
                         border: OutlineInputBorder(),
                       ),
                       items: ["001/PPID/2025", "002/PPID/2025", "003/PPID/2025"]
-                          .map((e) =>
-                              DropdownMenuItem(value: e, child: Text(e)))
+                          .map(
+                            (e) => DropdownMenuItem(value: e, child: Text(e)),
+                          )
                           .toList(),
                       onChanged: (val) => setState(() {
                         selectedNomorPermintaan = val;
@@ -160,14 +162,17 @@ class _EntrianKeberatanPageState extends State<EntrianKeberatanPage> {
                         labelText: "Alasan Pengajuan Keberatan Informasi *",
                         border: OutlineInputBorder(),
                       ),
-                      items: [
-                        "Permintaan tidak ditanggapi",
-                        "Permintaan ditolak",
-                        "Informasi tidak sesuai"
-                      ]
-                          .map((e) =>
-                              DropdownMenuItem(value: e, child: Text(e)))
-                          .toList(),
+                      items:
+                          [
+                                "Permintaan tidak ditanggapi",
+                                "Permintaan ditolak",
+                                "Informasi tidak sesuai",
+                              ]
+                              .map(
+                                (e) =>
+                                    DropdownMenuItem(value: e, child: Text(e)),
+                              )
+                              .toList(),
                       onChanged: (val) => setState(() {
                         selectedAlasan = val;
                         _unfocusAll();
@@ -184,7 +189,9 @@ class _EntrianKeberatanPageState extends State<EntrianKeberatanPage> {
                         const Text(
                           "Tujuan Pengajuan Keberatan *",
                           style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.w500),
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                          ),
                         ),
                         const SizedBox(height: 4),
                         GestureDetector(
@@ -208,7 +215,7 @@ class _EntrianKeberatanPageState extends State<EntrianKeberatanPage> {
                                 initialText: """
                                   <html>
                                     <head>
-                                      <style>
+                                      <style >
                                         body { 
                                           background-color: black !important; 
                                           color: white !important; 
@@ -246,7 +253,9 @@ class _EntrianKeberatanPageState extends State<EntrianKeberatanPage> {
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.blue,
                           padding: const EdgeInsets.symmetric(
-                              horizontal: 24, vertical: 12),
+                            horizontal: 24,
+                            vertical: 12,
+                          ),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(8),
                           ),

@@ -1,7 +1,7 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ppid/pages/DashboardUserPage.dart';
-import 'package:url_launcher/url_launcher.dart';
 import '../services/auth_service.dart';
 
 class LoginController {
@@ -36,7 +36,8 @@ class LoginController {
   }
 
   void _updateFormState() {
-    isFormValid = usernameController.text.trim().isNotEmpty &&
+    isFormValid =
+        usernameController.text.trim().isNotEmpty &&
         passwordController.text.trim().isNotEmpty &&
         captchaController.text.trim().isNotEmpty;
     _refreshUI();
@@ -56,15 +57,18 @@ class LoginController {
 
   String _generateCaptcha() {
     const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-    return List.generate(5, (index) => chars[_random.nextInt(chars.length)])
-        .join();
+    return List.generate(
+      5,
+      (index) => chars[_random.nextInt(chars.length)],
+    ).join();
   }
 
+  /// 🧠 Fungsi login dengan penyimpanan token
   Future<void> login() async {
     final captchaInput = captchaController.text.trim();
     if (captchaInput != generatedCaptcha) {
       _showDialog('Captcha tidak cocok', success: false);
-      resetForm(); // Reset semua input jika captcha salah
+      resetForm();
       return;
     }
 
@@ -82,7 +86,12 @@ class LoginController {
     if (response['success']) {
       final token = response['token'];
 
-      Navigator.of(_context).push(
+      // ✅ Simpan token ke SharedPreferences
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString('token', token);
+
+      // Arahkan ke Dashboard
+      Navigator.of(_context).pushReplacement(
         MaterialPageRoute(
           builder: (context) => DashboardUserPage(token: token),
         ),
@@ -91,6 +100,18 @@ class LoginController {
       _showDialog(response['message'], success: false);
       resetForm();
     }
+  }
+
+  /// 🔑 Ambil token yang tersimpan (untuk auto login)
+  Future<String?> getSavedToken() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString('token');
+  }
+
+  /// 🚪 Logout dan hapus token
+  Future<void> logout() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove('token');
   }
 
   void _showDialog(String message, {bool success = false}) {

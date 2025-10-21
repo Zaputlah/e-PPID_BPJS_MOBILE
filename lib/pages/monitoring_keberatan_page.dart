@@ -111,8 +111,8 @@ class _MonitoringKeberatanPageState extends State<MonitoringKeberatanPage> {
                         borderRadius: BorderRadius.circular(6),
                       ),
                     ),
-                    child: const Text("Home"),
-                  )
+                    child: const Text('home'),
+                  ),
                 ],
               ),
             ),
@@ -166,7 +166,9 @@ class _MonitoringKeberatanPageState extends State<MonitoringKeberatanPage> {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.green,
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 24, vertical: 16),
+                        horizontal: 24,
+                        vertical: 16,
+                      ),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
@@ -198,7 +200,8 @@ class _MonitoringKeberatanPageState extends State<MonitoringKeberatanPage> {
                   scrollDirection: Axis.horizontal,
                   child: DataTable(
                     headingRowColor: MaterialStateProperty.resolveWith(
-                        (states) => Colors.blue[100]),
+                      (states) => Colors.blue[100],
+                    ),
                     columns: const [
                       DataColumn(label: Text("No.")),
                       DataColumn(label: Text("Nomor")),
@@ -212,20 +215,25 @@ class _MonitoringKeberatanPageState extends State<MonitoringKeberatanPage> {
                               cells: [
                                 DataCell(Text("-")),
                                 DataCell(Text("-")),
-                                DataCell(Text("Tidak ada data",
-                                    style: TextStyle(color: Colors.red))),
+                                DataCell(
+                                  Text(
+                                    "Tidak ada data",
+                                    style: TextStyle(color: Colors.red),
+                                  ),
+                                ),
                                 DataCell(Text("-")),
                                 DataCell(Text("-")),
                               ],
-                            )
+                            ),
                           ]
                         : List.generate(_data.length, (index) {
                             final item = _data[index];
                             return DataRow(
                               color: MaterialStateProperty.resolveWith(
-                                  (states) => index % 2 == 0
-                                      ? Colors.grey[100]
-                                      : Colors.white),
+                                (states) => index % 2 == 0
+                                    ? Colors.grey[100]
+                                    : Colors.white,
+                              ),
                               cells: [
                                 DataCell(Text("${index + 1}")),
                                 DataCell(Text(item["nomor"] ?? "-")),
@@ -246,8 +254,10 @@ class _MonitoringKeberatanPageState extends State<MonitoringKeberatanPage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text("Total : ${_data.length} Items",
-                    style: const TextStyle(fontWeight: FontWeight.w500)),
+                Text(
+                  "Total : ${_data.length} Items",
+                  style: const TextStyle(fontWeight: FontWeight.w500),
+                ),
                 IconButton(
                   icon: const Icon(Icons.refresh, color: Colors.orange),
                   onPressed: _refresh,

@@ -7,13 +7,17 @@ class ResendActivationController {
 
   bool isLoading = false;
 
-  /// Hapus tag HTML/JS dan karakter berbahaya
- String sanitizeInput(String input) {
-  final withoutTags = input.replaceAll(RegExp(r'<[^>]*>'), '');
-  final safeString = withoutTags.replaceAll(RegExp(r"[;'\\""]"), '');
-  return safeString.trim();
-}
-
+  String sanitizeInput(String input) {
+    final withoutTags = input.replaceAll(RegExp(r'<[^>]*>'), '');
+    final safeString = withoutTags.replaceAll(
+      RegExp(
+        r"[;'\\"
+        "]",
+      ),
+      '',
+    );
+    return safeString.trim();
+  }
 
   Future<void> submit(BuildContext context) async {
     String username = sanitizeInput(usernameController.text);
@@ -38,7 +42,9 @@ class ResendActivationController {
     if (!RegExp(r'^[a-zA-Z0-9._]+$').hasMatch(username)) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text("Username hanya boleh huruf, angka, titik, dan underscore"),
+          content: Text(
+            "Username hanya boleh huruf, angka, titik, dan underscore",
+          ),
         ),
       );
       return;
@@ -47,53 +53,56 @@ class ResendActivationController {
     isLoading = true;
     try {
       final result = await _service.resendActivation(username);
-      final message = result["message"] ?? "Kode aktivasi berhasil dikirim";
+
+      // ✅ Ambil pesan langsung dari server (metadata.message)
+      final message =
+          result["metadata"]?["message"] ?? "Tidak ada pesan dari server.";
 
       await showDialog(
-  context: context,
-  builder: (ctx) => AlertDialog(
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(20),
-    ),
-    title: Row(
-      children: const [
-        Icon(Icons.check_circle, color: Colors.green, size: 28),
-        SizedBox(width: 8),
-        Text(
-          "Berhasil",
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 20,
-          ),
-        ),
-      ],
-    ),
-    content: Text(
-      message,
-      style: const TextStyle(fontSize: 16),
-    ),
-    actions: [
-      TextButton(
-        style: TextButton.styleFrom(
-          foregroundColor: Colors.white,
-          backgroundColor: Colors.green,
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+        context: context,
+        builder: (ctx) => AlertDialog(
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: BorderRadius.circular(20),
           ),
+          title: Row(
+            children: const [
+              Icon(Icons.info, color: Colors.blue, size: 28),
+              SizedBox(width: 8),
+              Text(
+                "Informasi",
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+              ),
+            ],
+          ),
+          content: Text(message, style: const TextStyle(fontSize: 16)),
+          actions: [
+            TextButton(
+              style: TextButton.styleFrom(
+                foregroundColor: Colors.white,
+                backgroundColor: Colors.blue,
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 10,
+                ),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+              onPressed: () {
+                Navigator.pop(ctx); // tutup dialog
+                Navigator.pushReplacementNamed(context, '/activation_page');
+              },
+              child: const Text("OK"),
+            ),
+          ],
         ),
-        onPressed: () => Navigator.pop(ctx),
-        child: const Text("OK"),
-      ),
-    ],
-  ),
-);
+      );
 
       usernameController.clear();
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Terjadi kesalahan: $e")),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text("Terjadi kesalahan: $e")));
     } finally {
       isLoading = false;
     }

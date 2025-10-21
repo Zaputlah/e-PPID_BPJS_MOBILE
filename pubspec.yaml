@@ -50,6 +50,7 @@ dependencies:
   file_picker: ^10.3.2
   html_editor_enhanced: ^2.7.1
   get: ^4.6.6
+  flutter_secure_storage: ^8.0.0
 
 
   # The following adds the Cupertino Icons font to your application.
